@@ -15,18 +15,22 @@ const useLoginContext = () => {
 
 // Create the LoginProvider component
 const LoginProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const isLogin =   localStorage.getItem('isLogin');
+  const [isLoggedIn, setIsLoggedIn] = useState(isLogin === 'true');
 
   const handleLogin = () => {
     // Implement your login logic here (e.g., with API calls to the server).
     // For simplicity, we'll assume a successful login.
     setIsLoggedIn(true);
+    localStorage.setItem('isLogin', true)
     // You can store additional user data in the context if needed.
   };
 
   const handleLogout = () => {
     // Implement your logout logic here (e.g., clearing tokens, etc.).
     setIsLoggedIn(false);
+    localStorage.removeItem('isLogin', true)
   };
 
   const value = {

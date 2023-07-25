@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.project.management.model.User;
@@ -30,7 +29,6 @@ public class UserController {
 	//create user rest api
 	@PostMapping("/user")
 	public User createUser(@RequestBody User user) {
-		
 		return userRepository.save(user);
 	}
 	

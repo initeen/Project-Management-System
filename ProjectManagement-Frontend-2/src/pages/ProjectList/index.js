@@ -78,7 +78,7 @@ const ProjectList = () => {
 
   // Pagination state
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Sorting state
   const [sortBy, setSortBy] = useState("priority"); // Default sorting by project projectTheme

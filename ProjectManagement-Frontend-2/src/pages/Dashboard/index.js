@@ -18,6 +18,7 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { Switch, Route } from "react-router-dom";
 import Chart from "./Chart";
+import { getAPICall } from 'utils/api';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   tileItemPaper: {
     padding: "10px 22px",
-    borderLeft: "8px solid #0096FF",
+    borderLeft: "8px solid #005aa8",
   },
   chartHeading: {
     marginTop: "25px",
@@ -54,6 +55,68 @@ const data = [
   { name: "Reopened projects", value: 10 },
 ];
 
+
+const resp = {
+  "statusCounters": [
+      {
+          "status": "Running",
+          "count": 5
+      },
+      {
+          "status": "Cancelled",
+          "count": 3
+      },
+      {
+          "status": "Closed",
+          "count": 1
+      },
+      {
+          "status": "Registered",
+          "count": 1
+      },
+      {
+          "status": "Total",
+          "count": 10
+      },
+      {
+          "status": "CloserDelay",
+          "count": 3
+      }
+  ],
+  "deptCounters": [
+      {
+          "dept": "Stratergy",
+          "totalProjects": 1,
+          "closedProjects": 0
+      },
+      {
+          "dept": "Quality",
+          "totalProjects": 2,
+          "closedProjects": 0
+      },
+      {
+          "dept": "HR",
+          "totalProjects": 1,
+          "closedProjects": 0
+      },
+      {
+          "dept": "Finance",
+          "totalProjects": 3,
+          "closedProjects": 1
+      },
+      {
+          "dept": "GG",
+          "totalProjects": 2,
+          "closedProjects": 0
+      },
+      {
+          "dept": "GM",
+          "totalProjects": 1,
+          "closedProjects": 0
+      }
+  ]
+}
+
 export default function Dashboard() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -61,12 +124,12 @@ export default function Dashboard() {
 
   const fetchSummaryData = async () => {
     try {
-      const response = await fetch("/api/summary");
-      if (!response.ok) {
-        throw new Error("Failed to fetch summary data");
-      }
-      const data = await response.json();
-      setSummaryData(data);
+      const {data} = await getAPICall("/summary");
+      const statusCounts = {}
+      const filteredStatusCounters = data?.statusCounters?.filter((item) => item.status !== "Running");
+
+      debugger;
+      setSummaryData({statusCounts: filteredStatusCounters, deptCounters: data?.deptCounters});
     } catch (error) {
       console.error(error);
     }
@@ -77,25 +140,24 @@ export default function Dashboard() {
   }, []);
 
   const statusCounts = summaryData?.statusCounts || [];
-  const closedProjectsByDept = summaryData?.closedProjectsByDept || [];
-  const totalProjectsByDept = summaryData?.totalProjectsByDept || [];
+  const deptCounters = summaryData?.deptCounters || [];
 
   return (
     <div>
       <Paper sx={{ overflowX: "auto" }} elevation={0}>
         <Grid container direction="row" justifyContent="flex-start" spacing={2}>
-          {data.map((item) => (
-            <Grid key={item.name} item className={classes.tileItem}>
+          {statusCounts?.map((item) => (
+            <Grid key={item.status} item className={classes.tileItem}>
               <Paper elevation={3} className={classes.tileItemPaper}>
                 <Typography variant="subtitle1" gutterBottom>
-                  {item.name}
+                  {item.status}
                 </Typography>
                 <Typography
                   className={classes.tileValue}
                   variant="h4"
                   sx={{ mt: 1 }}
                 >
-                  {item.value}
+                  {item.count}
                 </Typography>
               </Paper>
             </Grid>
@@ -108,8 +170,8 @@ export default function Dashboard() {
       <Grid item xs={12} md={6} lg={6}>
         <Paper className={fixedHeightPaper}>
           <Chart
-            closedProjectsByDept={closedProjectsByDept}
-            totalProjectsByDept={totalProjectsByDept}
+             data={deptCounters}
+             key={JSON.stringify(deptCounters)}
           />
         </Paper>
       </Grid>

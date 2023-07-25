@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
-import AppBar from "@material-ui/core/AppBar";
+import Box from "@material-ui/core/Box";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
@@ -14,12 +14,17 @@ import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { MainListItems, SecondaryListItems } from "./listItems";
+import { MainListItems, SecondaryListItems, LogoutListItem } from "./listItems";
 import { Switch, Route } from "react-router-dom";
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import { useLocation } from "react-router-dom";
 
 import Dashboard from "pages/Dashboard";
 import ProjectList from "pages/ProjectList";
 import CreateProject from 'pages/CreateProject';
+import logo from 'assets/images/Logo.svg';
+
+
 
 const drawerWidth = 240;
 
@@ -69,6 +74,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    display: "flex",
+    justifyContent: "center",
   },
   drawerPaperClose: {
     overflowX: "hidden",
@@ -81,15 +88,21 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9),
     },
   },
-  appBarSpacer: theme.mixins.toolbar,
+  appBarSpacer: { ...theme.mixins.toolbar, display: "flex", },
   content: {
     flexGrow: 1,
     height: "100vh",
     overflow: "auto",
+    backgroundImage: `url('/Header-bg.svg')`,
+    backgroundRepeat: "no-repeat",
   },
   container: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(4),
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+
   },
   paper: {
     padding: theme.spacing(2),
@@ -112,56 +125,30 @@ export default function AppLayout() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  const location = useLocation();
+
+  const renderHeaderText = () => {
+    switch (location.pathname) {
+      case "/project/list":
+        return "Project Listing";
+      case "/project":
+        return "Dashboard";
+      case "/project/create":
+        return "Create Project";
+    }
+  };
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            className={classes.title}
-          >
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
       <Drawer
         variant="permanent"
         classes={{
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
-        open={open}
+        style={{ display: "flex", justifyContent: "center" }}
+        open={false}
       >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
         <List>
           <MainListItems />
         </List>
@@ -169,9 +156,26 @@ export default function AppLayout() {
         <List>
           <SecondaryListItems />
         </List>
+        <List>
+          <LogoutListItem />
+        </List>
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <div className={classes.appBarSpacer}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <ArrowBackIosIcon style={{ color: "white" }} />
+              <div style={{ color: "white" }}>
+                <Box style={{ fontSize: '20px' }} m={1}>
+                  {renderHeaderText()}
+                </Box>
+              </div>
+            </div>
+            <div style={{marginLeft: "420px"}}>
+              <img src={logo} alt="Logo"
+              /></div>
+          </div>
+        </Container>
         <Container maxWidth="lg" className={classes.container}>
           <Switch>
             <Route exact path="/project">

@@ -8,6 +8,7 @@ import {
   InputLabel,
   Button,
   Typography,
+  Paper,
 } from "@material-ui/core";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import axios from "axios"; // Import Axios
@@ -166,148 +167,150 @@ const ProjectForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Grid container spacing={5}>
-        {/* Project Theme */}
-        <Grid item xs={12} sm={6}>
-          {/* Project Theme (TextArea) */}
-          <TextField
-            label="Project Theme"
-            multiline
-            rows={2} // Set the number of rows (half of the row)
-            fullWidth
-            variant="outlined"
-            name="projectTheme"
-            value={formData.projectTheme}
-            onChange={handleChange}
-            error={formErrors.projectTheme}
-            helperText={formErrors.projectTheme && "Project Theme is required"}
-          />
-        </Grid>
+      <Paper style={{ padding: "30px 20px" }}>
+        <Grid container spacing={5}>
+          {/* Project Theme */}
+          <Grid item xs={12} sm={6}>
+            {/* Project Theme (TextArea) */}
+            <TextField
+              label="Project Theme"
+              multiline
+              rows={2} // Set the number of rows (half of the row)
+              fullWidth
+              variant="outlined"
+              name="projectTheme"
+              value={formData.projectTheme}
+              onChange={handleChange}
+              error={formErrors.projectTheme}
+              helperText={formErrors.projectTheme && "Project Theme is required"}
+            />
+          </Grid>
 
-        <Grid style={{ display: "flex" }} item xs={12} sm={6}>
-          <Grid item xs={6}></Grid>
-          <Grid item xs={6}>
-            <Button type="submit" variant="contained" color="primary" style={{ borderRadius: '20px' }} fullWidth>
-              Save Project
-            </Button>
+          <Grid style={{ display: "flex" }} item xs={12} sm={6}>
+            <Grid item xs={6}></Grid>
+            <Grid item xs={6}>
+              <Button type="submit" variant="contained" color="primary" style={{ borderRadius: '20px' }} fullWidth>
+                Save Project
+              </Button>
+            </Grid>
+          </Grid>
+          {/* </Grid>
+      <Grid container spacing={5}> */}
+          {/* Reason */}
+          <Grid item xs={12} sm={4}>
+            {renderSelectInput({
+              label: "Reason",
+              name: "reason",
+              options: reasonOptions,
+            })}
+          </Grid>
+          {/* Type */}
+          <Grid item xs={12} sm={4}>
+            {renderSelectInput({
+              label: "Type",
+              name: "type",
+              options: typeOptions,
+            })}
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {renderSelectInput({
+              label: "Division",
+              name: "division",
+              options: divisionOptions,
+            })}
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            {/* Category */}
+            {renderSelectInput({
+              label: "Category",
+              name: "category",
+              options: catgoryOptions,
+            })}
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {/* Priority */}
+            {renderSelectInput({
+              label: "Priority",
+              name: "priority",
+              options: priorityOptions,
+            })}
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {/* Department */}
+            {renderSelectInput({
+              label: "Department",
+              name: "department",
+              options: deptOptions,
+            })}
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {/* Start Date */}
+            <KeyboardDatePicker
+              label="Start Date"
+              format="dd/MM/yyyy"
+              fullWidth
+              autoOk
+              variant="inline"
+              inputVariant="outlined"
+              name="startDate"
+              shouldDisableDate={disablePastStartDates}
+              value={formData?.startDate?.toString() || null}
+              onChange={(date) =>
+                handleChange({ target: { value: date, name: "startDate" } })
+              }
+              error={formErrors.startDate}
+              helperText={formErrors.startDate && "Start Date is required"}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {/* End Date */}
+            <KeyboardDatePicker
+              label="End Date"
+              format="dd/MM/yyyy"
+              shouldDisableDate={disablePastDates}
+              fullWidth
+              autoOk
+              variant="inline"
+              inputVariant="outlined"
+              name="endDate"
+              value={formData?.endDate?.toString() || null}
+              onChange={(date) =>
+                handleChange({ target: { value: date, name: "endDate" } })
+              }
+              error={formErrors.endDate}
+              helperText={formErrors.endDate && "End Date is required"}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            {/* Location */}
+            {renderSelectInput({
+              label: "Location",
+              name: "location",
+              options: locationOptions,
+            })}
+          </Grid>
+          <Grid item xs={12} sm={8}></Grid>
+          <Grid
+            item
+            xs={12}
+            sm={4}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <Typography variant="h7" style={{ marginTop: "3px" }}>
+              Status:
+            </Typography>
+            <Typography variant="h6" style={{ marginLeft: "9px" }}>
+              <b>Registered</b>
+            </Typography>
           </Grid>
         </Grid>
-        {/* </Grid>
-      <Grid container spacing={5}> */}
-        {/* Reason */}
-        <Grid item xs={12} sm={4}>
-          {renderSelectInput({
-            label: "Reason",
-            name: "reason",
-            options: reasonOptions,
-          })}
-        </Grid>
-        {/* Type */}
-        <Grid item xs={12} sm={4}>
-          {renderSelectInput({
-            label: "Type",
-            name: "type",
-            options: typeOptions,
-          })}
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {renderSelectInput({
-            label: "Division",
-            name: "division",
-            options: divisionOptions,
-          })}
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          {/* Category */}
-          {renderSelectInput({
-            label: "Category",
-            name: "category",
-            options: catgoryOptions,
-          })}
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {/* Priority */}
-          {renderSelectInput({
-            label: "Priority",
-            name: "priority",
-            options: priorityOptions,
-          })}
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {/* Department */}
-          {renderSelectInput({
-            label: "Department",
-            name: "department",
-            options: deptOptions,
-          })}
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {/* Start Date */}
-          <KeyboardDatePicker
-            label="Start Date"
-            format="dd/MM/yyyy"
-            fullWidth
-            autoOk
-            variant="inline"
-            inputVariant="outlined"
-            name="startDate"
-            shouldDisableDate={disablePastStartDates}
-            value={formData?.startDate?.toString() || null}
-            onChange={(date) =>
-              handleChange({ target: { value: date, name: "startDate" } })
-            }
-            error={formErrors.startDate}
-            helperText={formErrors.startDate && "Start Date is required"}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {/* End Date */}
-          <KeyboardDatePicker
-            label="End Date"
-            format="dd/MM/yyyy"
-            shouldDisableDate={disablePastDates}
-            fullWidth
-            autoOk
-            variant="inline"
-            inputVariant="outlined"
-            name="endDate"
-            value={formData?.endDate?.toString() || null}
-            onChange={(date) =>
-              handleChange({ target: { value: date, name: "endDate" } })
-            }
-            error={formErrors.endDate}
-            helperText={formErrors.endDate && "End Date is required"}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
-          {/* Location */}
-          {renderSelectInput({
-            label: "Location",
-            name: "location",
-            options: locationOptions,
-          })}
-        </Grid>
-        <Grid item xs={12} sm={8}></Grid>
-        <Grid
-          item
-          xs={12}
-          sm={4}
-          style={{ display: "flex", alignItems: "center" }}
-        >
-          <Typography variant="h7" style={{ marginTop: "3px" }}>
-            Status:
-          </Typography>
-          <Typography variant="h6" style={{ marginLeft: "9px" }}>
-            Registered
-          </Typography>
-        </Grid>
-      </Grid>
+      </Paper>
     </form>
   );
 };

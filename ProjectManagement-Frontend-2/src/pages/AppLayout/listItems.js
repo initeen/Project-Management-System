@@ -8,6 +8,9 @@ import { useLocation } from "react-router-dom";
 import StorageOutlinedIcon from "@material-ui/icons/StorageOutlined";
 import SpeedOutlinedIcon from "@material-ui/icons/SpeedOutlined";
 import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
+import { ExitToApp as ExitToAppIcon } from '@material-ui/icons';
+import { useLoginContext } from "contexts/LoginContext";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   activeListItem: {
@@ -32,8 +35,8 @@ export const MainListItems = () => {
         }
       >
         <ListItemIcon>
-          <SpeedOutlinedIcon />
-        </ListItemIcon>
+          <SpeedOutlinedIcon style={{ color: `${location.pathname === "/project" ? "#044e92" : ''}` }} />
+        </ListItemIcon >
         <ListItemText primary="Dashboard" />
       </ListItem>
       <ListItem
@@ -45,7 +48,7 @@ export const MainListItems = () => {
         }
       >
         <ListItemIcon>
-          <StorageOutlinedIcon />
+          <StorageOutlinedIcon style={{ color: `${location.pathname === "/project/list" ? "#044e92" : ''}` }} />
         </ListItemIcon>
         <ListItemText primary="Projects" />
       </ListItem>
@@ -67,9 +70,32 @@ export const SecondaryListItems = () => {
         }
       >
         <ListItemIcon>
-          <AddOutlinedIcon />
+          <AddOutlinedIcon style={{ color: `${location.pathname === "/project/create" ? "#044e92" : ''}` }} />
         </ListItemIcon>
         <ListItemText primary="Create Project" />
+      </ListItem>
+    </div>
+  );
+};
+
+
+export const LogoutListItem = () => {
+  const { handleLogout } = useLoginContext();
+  const history = useHistory();
+  const onLogoutClick = () => {
+    handleLogout();
+    history.push('/login');
+  };
+  return (
+    <div>
+      <ListItem
+        button
+        onClick={onLogoutClick}
+      >
+        <ListItemIcon>
+          <ExitToAppIcon />
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
       </ListItem>
     </div>
   );
