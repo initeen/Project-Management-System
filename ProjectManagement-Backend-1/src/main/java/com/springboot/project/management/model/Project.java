@@ -18,7 +18,7 @@ public class Project {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "project_id")
-	private int projectId;
+	private long projectId;
 	
 	@Column(name="project_theme")
 	private String projectTheme;
@@ -60,7 +60,7 @@ public class Project {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Project(int projectId, String projectTheme, String reason, String type, String division, String category,
+	public Project(long projectId, String projectTheme, String reason, String type, String division, String category,
 			String priority, String department, Date startDate, Date endDate, String location, String status) {
 		super();
 		this.projectId = projectId;
@@ -77,11 +77,11 @@ public class Project {
 		this.status = status;
 	}
 
-	public int getProjectId() {
+	public long getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(int projectId) {
+	public void setProjectId(long projectId) {
 		this.projectId = projectId;
 	}
 
@@ -181,6 +181,5 @@ public class Project {
 				+ location + ", status=" + status + "]";
 	}
 
-	
 	
 }

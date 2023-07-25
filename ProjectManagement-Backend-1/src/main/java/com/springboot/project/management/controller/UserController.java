@@ -1,6 +1,8 @@
 package com.springboot.project.management.controller;
 
 import java.util.List;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.project.management.model.User;
@@ -46,19 +49,52 @@ public class UserController {
 //        } else {
 //            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 //        }
-        List<User> users = userRepository.findAll();        
+//        List<User> users = userRepository.findAll();        
+//
+//        User findUser = null;
+//        for(User user : users ) {
+//        	if (user.getEmailId().equals(emailId) && user.getPassword().equals(password)) {
+//        		findUser=user;
+//        	}
+//        }
+//        System.out.println(findUser);
+//        if (findUser == null) {
+//        	 Map<String, String> errorResponse = new HashMap<>();
+//             errorResponse.put("error", "Invalid credentials");
+//             errorResponse.put("message", "The username or password you provided is incorrect. Please try again.");
+//             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+//    
+//        }
+//        return ResponseEntity.ok(findUser);
 
-        User findUser = null;
-        for(User user : users ) {
-        	if (user.getEmailId().equals(emailId) && user.getPassword().equals(password)) {
-        		findUser=user;
-        	}
-        }
-        System.out.println(findUser);
-        if (findUser == null) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid");
-        }
-        return ResponseEntity.ok(findUser);
+        User user = userRepository.findByEmailAndPassword(emailId, password);  
+        System.out.println(user);
+        if (user == null) {
+       	 Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid credentials");
+            errorResponse.put("message", "The username or password you provided is incorrect. Please try again.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+   
+       }
+        user.setPassword(null);
+        Map<String, String> successResponse = new HashMap<>();
+        	successResponse.put("success", "true");
+        	successResponse.put("message", "Valid user");
+        
+        	return ResponseEntity.status(HttpStatus.OK).body(successResponse);
+        
+    }
+	
+	@PostMapping("/logout")
+    public String logout(@RequestBody User user) {
+        // Implement logout logic here, such as clearing session data or invalidating the session.
+        // For example, if using Spring Security, you can invalidate the session as follows:
+        // SecurityContextHolder.clearContext();
+        // request.getSession().invalidate();
+
+		
+		
+        return "Logged out successfully!";
     }
 	  
 }
