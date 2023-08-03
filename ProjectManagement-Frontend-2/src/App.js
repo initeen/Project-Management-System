@@ -1,10 +1,14 @@
 import React from "react";
+
+// components from React router 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+
+//
 import { LoginProvider } from "./contexts/LoginContext";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";

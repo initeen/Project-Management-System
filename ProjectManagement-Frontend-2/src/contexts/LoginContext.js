@@ -30,7 +30,7 @@ const LoginProvider = ({ children }) => {
   const handleLogout = () => {
     // Implement your logout logic here (e.g., clearing tokens, etc.).
     setIsLoggedIn(false);
-    localStorage.removeItem('isLogin', true)
+    localStorage.removeItem('isLogin')
   };
 
   const value = {

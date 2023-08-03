@@ -17,82 +17,44 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.project.management.model.User;
 import com.springboot.project.management.repository.UserRepository;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+//@CrossOrigin(origins = "http://project-management-1997.s3-website.eu-north-1.amazonaws.com/")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/api/v1")
 public class UserController {
 
-	@Autowired 
+	@Autowired
 	private UserRepository userRepository;
 
-
-	//create user rest api
+	// create user rest api
 	@PostMapping("/user")
 	public User createUser(@RequestBody User user) {
 		return userRepository.save(user);
 	}
-	
-	//create login authentification
+
+	// create login authentification
 	@PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
-        String emailId = credentials.get("emailId");
-        String password = credentials.get("password");
+	public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+		String emailId = credentials.get("emailId");
+		String password = credentials.get("password");
 
-        // Fetch user from the database based on the username
-//        User user = userRepository.findByemailId(emailId);
-        
-        // Check if the user exists and the password matches
-//        if (user != null && user.getPassword().equals(password)) {
-//            return ResponseEntity.ok("Login successful!");
-//        } else {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
-//        }
-//        List<User> users = userRepository.findAll();        
-//
-//        User findUser = null;
-//        for(User user : users ) {
-//        	if (user.getEmailId().equals(emailId) && user.getPassword().equals(password)) {
-//        		findUser=user;
-//        	}
-//        }
-//        System.out.println(findUser);
-//        if (findUser == null) {
-//        	 Map<String, String> errorResponse = new HashMap<>();
-//             errorResponse.put("error", "Invalid credentials");
-//             errorResponse.put("message", "The username or password you provided is incorrect. Please try again.");
-//             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-//    
-//        }
-//        return ResponseEntity.ok(findUser);
+		User user = userRepository.findByEmailAndPassword(emailId, password);
+		System.out.println(user);
+		if (user == null) {
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "Invalid credentials");
+			errorResponse.put("message", "The username or password you provided is incorrect. Please try again.");
 
-        User user = userRepository.findByEmailAndPassword(emailId, password);  
-        System.out.println(user);
-        if (user == null) {
-       	 Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Invalid credentials");
-            errorResponse.put("message", "The username or password you provided is incorrect. Please try again.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-   
-       }
-        user.setPassword(null);
-        Map<String, String> successResponse = new HashMap<>();
-        	successResponse.put("success", "true");
-        	successResponse.put("message", "Valid user");
-        
-        	return ResponseEntity.status(HttpStatus.OK).body(successResponse);
-        
-    }
-	
-	@PostMapping("/logout")
-    public String logout(@RequestBody User user) {
-        // Implement logout logic here, such as clearing session data or invalidating the session.
-        // For example, if using Spring Security, you can invalidate the session as follows:
-        // SecurityContextHolder.clearContext();
-        // request.getSession().invalidate();
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 
-		
-		
-        return "Logged out successfully!";
-    }
-	  
+		}
+		user.setPassword(null);
+		Map<String, String> successResponse = new HashMap<>();
+		successResponse.put("success", "true");
+		successResponse.put("message", "Valid user");
+
+		return ResponseEntity.status(HttpStatus.OK).body(successResponse);
+
+	}
+
 }

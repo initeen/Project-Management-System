@@ -24,6 +24,7 @@ import com.springboot.project.management.model.User;
 import com.springboot.project.management.repository.ProjectRepository;
 import com.springboot.project.management.services.*;
 
+//@CrossOrigin(origins = "http://project-management-1997.s3-website.eu-north-1.amazonaws.com/")
 @CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/api/v1")
@@ -64,8 +65,7 @@ public class ProjectController {
 
 		List<ProjectCountByDeptDTO> projectCounts = new ArrayList<>();
 
-
-        Long totalProjectCount = projectRepository.getTotalProjectCount();
+		Long totalProjectCount = projectRepository.getTotalProjectCount();
 
 		List<Object[]> result = projectRepository.getProjectCountsByDept();
 		for (Object[] row : result) {
@@ -115,7 +115,7 @@ public class ProjectController {
 
 	// update project api
 	@PutMapping("/project/{projectId}")
-	public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody Project projectDetails) {
+	public ResponseEntity<Map<String, String>> updateProject(@PathVariable Long projectId, @RequestBody Project projectDetails) {
 		Project project = projectRepository.findById(projectId).orElseThrow();
 		project.setProjectId(projectDetails.getProjectId());
 		project.setStatus(projectDetails.getStatus());

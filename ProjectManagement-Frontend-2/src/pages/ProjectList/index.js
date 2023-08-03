@@ -82,7 +82,6 @@ const ProjectList = () => {
 
   // Sorting state
   const [sortBy, setSortBy] = useState("priority"); // Default sorting by project projectTheme
-  const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order
   const [searchQuery, setSearchQuery] = useState("");
 
   // Handle pagination change
@@ -100,7 +99,6 @@ const ProjectList = () => {
   const handleSortChange = (event) => {
     const value = event.target.value;
     setSortBy(value);
-    setSortOrder("asc"); // Default ascending for project projectTheme, descending for others
   };
 
   const handleAction = async (status, project) => {
@@ -127,7 +125,7 @@ const ProjectList = () => {
           project.reason.toLowerCase().includes(lowerCasedQuery) ||
           project.type.toLowerCase().includes(lowerCasedQuery) ||
           project.division.toLowerCase().includes(lowerCasedQuery) ||
-          project.category.toLowerCase().includes(lowerCasedQuery) ||
+          project.category.toLowerCase()==lowerCasedQuery ||
           project.priority.toLowerCase().includes(lowerCasedQuery) ||
           project.department.toLowerCase().includes(lowerCasedQuery) ||
           project.location.toLowerCase().includes(lowerCasedQuery) ||
@@ -135,10 +133,7 @@ const ProjectList = () => {
         );
       })
       .sort((a, b) => {
-        const compareResult =
-          sortOrder === "asc"
-            ? a[sortBy].localeCompare(b[sortBy])
-            : b[sortBy].localeCompare(a[sortBy]);
+        const compareResult = a[sortBy].localeCompare(b[sortBy])
         return compareResult;
       });
     setPaginatedData(filteredPro);
@@ -146,9 +141,13 @@ const ProjectList = () => {
     setTableData(newPro);
   };
 
+  // projects = backend data = 22
+  // paginatedData = filered + sorted = 6
+  // tableData= 5
+
   useEffect(() => {
     handleSearchSortingPagination();
-  }, [searchQuery, projects, sortBy, sortOrder, page, rowsPerPage]);
+  }, [searchQuery, projects, sortBy, page, rowsPerPage]);
 
   const getFormatedDate = (date) => {
     const originalDate = new Date(date);
@@ -165,22 +164,14 @@ const ProjectList = () => {
           padding: "10px",
         }}
       >
-        {/* Search input */}
-        {/* <TextField
-          label="Search"
-          variant="outlined"
-          className={classes.compactTextField}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        /> */}
         <CompactSearchInput value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)} />
         {/* Sort by dropdown */}
         <FormControl variant="outlined">
           <InputLabel>Sort By</InputLabel>
           <Select value={sortBy} onChange={handleSortChange} label="Sort By">
-          <MenuItem value="priority">Priority</MenuItem>
-          <MenuItem value="category">Category</MenuItem>
+            <MenuItem value="priority">Priority</MenuItem>
+            <MenuItem value="category">Category</MenuItem>
             <MenuItem value="reason">Reason</MenuItem>
             <MenuItem value="division">Division</MenuItem>
             <MenuItem value="department">Department</MenuItem>

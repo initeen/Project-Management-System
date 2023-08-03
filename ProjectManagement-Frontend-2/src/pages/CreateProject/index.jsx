@@ -11,7 +11,6 @@ import {
   Paper,
 } from "@material-ui/core";
 import { KeyboardDatePicker } from "@material-ui/pickers";
-import axios from "axios"; // Import Axios
 import { getAPICall, postAPICall } from 'utils/api';
 import { useHistory } from "react-router-dom";
 
@@ -35,7 +34,7 @@ const reasonOptions = [
 ];
 
 const ProjectForm = () => {
-  // State to manage form data
+ 
   const history = useHistory();
   const [formData, setFormData] = useState({
     projectTheme: "",
@@ -50,7 +49,7 @@ const ProjectForm = () => {
     location: "",
   });
 
-  // State to manage form validation errors
+  
   const [formErrors, setFormErrors] = useState({
     projectTheme: false,
     reason: false,
@@ -64,11 +63,11 @@ const ProjectForm = () => {
     location: false,
   });
 
-  // Function to handle form submission
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Check for required fields
+    
     const requiredFields = [
       "projectTheme",
       "reason",
@@ -85,7 +84,7 @@ const ProjectForm = () => {
 
     const hasErrors = requiredFields.some((field) => !formData[field]);
 
-    // Update formErrors state based on validation
+    
     setFormErrors((prevErrors) => ({
       ...prevErrors,
       projectTheme: !formData.projectTheme,
@@ -101,18 +100,7 @@ const ProjectForm = () => {
     }));
 
     if (!hasErrors) {
-      // All required fields are filled, proceed with form submission
-      // Replace 'YOUR_API_ENDPOINT' with the actual API endpoint to post the data
-      // axios
-      //   .post("YOUR_API_ENDPOINT", formData)
-      //   .then((response) => {
-      //     // Handle successful response from the server (if needed)
-      //     console.log("Form data submitted successfully:", response.data);
-      //   })
-      //   .catch((error) => {
-      //     // Handle error response from the server (if needed)
-      //     console.error("Error submitting form data:", error);
-      //   });
+      
       const payload = {
         ...formData,
         status: "Registered",
@@ -122,7 +110,7 @@ const ProjectForm = () => {
     }
   };
 
-  // Function to handle changes in form fields
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -151,14 +139,15 @@ const ProjectForm = () => {
   };
 
   const disablePastDates = (date) => {
-    // Replace '2023-07-31' with your specific date
+    
     if (!formData.startDate) {
       return false;
     }
     return date < new Date(formData.startDate);
   };
   const disablePastStartDates = (date) => {
-    // Replace '2023-07-31' with your specific date
+
+  
     if (!formData.endDate) {
       return false;
     }
@@ -169,13 +158,12 @@ const ProjectForm = () => {
     <form onSubmit={handleSubmit}>
       <Paper style={{ padding: "30px 20px" }}>
         <Grid container spacing={5}>
-          {/* Project Theme */}
           <Grid item xs={12} sm={6}>
-            {/* Project Theme (TextArea) */}
+            
             <TextField
               label="Project Theme"
               multiline
-              rows={2} // Set the number of rows (half of the row)
+              rows={2} 
               fullWidth
               variant="outlined"
               name="projectTheme"
@@ -183,6 +171,7 @@ const ProjectForm = () => {
               onChange={handleChange}
               error={formErrors.projectTheme}
               helperText={formErrors.projectTheme && "Project Theme is required"}
+              autoFocus
             />
           </Grid>
 
@@ -194,9 +183,7 @@ const ProjectForm = () => {
               </Button>
             </Grid>
           </Grid>
-          {/* </Grid>
-      <Grid container spacing={5}> */}
-          {/* Reason */}
+          
           <Grid item xs={12} sm={4}>
             {renderSelectInput({
               label: "Reason",

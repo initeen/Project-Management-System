@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
 import { Link } from "react-router-dom";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -16,30 +12,46 @@ import { IconButton, InputAdornment } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from 'react-router-dom';
 import { postAPICall } from 'utils/api';
-
+import logo from 'assets/images/Logo.svg';
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    backgroundImage: `url('/login-bg-1.svg')`,
+    height: "100vh",
+    width: "100vw",
+    backgroundSize: "contain",
+    backgroundRepeat: "no-repeat",
+  },
   paper: {
-    marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
   form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
+    width: "100%",
+    marginTop: theme.spacing(1),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    width: "60%",
+    borderRadius: "20px",
   },
   loading: {
     marginLeft: theme.spacing(2),
     color: "white",
   },
+  formContainer: {
+    background: "white",
+    padding: "25px",
+    marginTop: "15px",
+    borderRadius: "7px",
+  },
+  submitWrap: {
+    display: "flex",
+    justifyContent: "center",
+  }
+
 }));
 
 export default function SignUp() {
@@ -66,12 +78,7 @@ export default function SignUp() {
 
   const validateForm = (currFormData) => {
     const newErrors = {};
-    if (!currFormData.firstName.trim()) {
-      newErrors.firstName = "First Name is required";
-    }
-    if (!currFormData.lastName.trim()) {
-      newErrors.lastName = "Last Name is required";
-    }
+
     if (!currFormData.emailId.trim()) {
       newErrors.emailId = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currFormData.emailId)) {
@@ -89,23 +96,13 @@ export default function SignUp() {
     if (validateForm(formData)) {
       setIsLoading(true);
       try {
-          await postAPICall('/user', formData)
-          setIsLoading(false);
-          console.log("Signup successful:", formData);
-          history.push('/login');
-        //  Simulate API call for login (replace this with your actual login logic)
-        // setTimeout(() => {
-        //   setIsLoading(false);
-        //   console.log("Signup successful:", formData);
-        //   history.push('/login');
-        //   // After successful login, you can redirect the user to the dashboard or another page
-        // }, 2000);
-        // const response = await axios.post('YOUR_API_ENDPOINT', formData);
-        // console.log('Signup successful:', response.data);
-        // Handle success (e.g., show success message, redirect to dashboard, etc.)
+        await postAPICall('/user', formData)
+        setIsLoading(false);
+        console.log("Signup successful:", formData);
+        history.push('/login');
       } catch (error) {
         console.error("Signup error:", error);
-        // Handle error (e.g., show error message)
+
       }
     }
   };
@@ -114,144 +111,93 @@ export default function SignUp() {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-  //   const handleSubmit = (event) => {
-  //     event.preventDefault();
-  //     const data = new FormData(event.currentTarget);
-  //     console.log({
-  //       emailId: data.get("emailId"),
-  //       password: data.get("password"),
-  //       firstName: data.get("firstName"),
-  //       lastName: data.get("lastName"),
-  //     });
-  //     setIsLoading(true);
-
-  //     // Simulate API call for login (replace this with your actual login logic)
-  //     setTimeout(() => {
-  //       setIsLoading(false);
-  //       // After successful login, you can redirect the user to the dashboard or another page
-  //     }, 2000);
-  //   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        {/* <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar> */
-        }
-         <img
-      src="/path/to/your/logo.png" // Replace this with the actual path to your logo image
-      alt="Logo"
-      className={classes.logo}
-    />
+    <div className={classes.root}>
+      <Container component="main" maxWidth="xs" style={{ paddingTop: "50px" }}>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <img src={logo} alt="Logo"
+          />
+          <Typography style={{ color: 'white', marginTop: '10px' }} component="h6" variant="h6">
+            Sign up
+          </Typography>
+          <Paper className={classes.formContainer}>
+            <Typography style={{ textAlign: 'center' }} component="h6" variant="h6">
+              Create account
+            </Typography>
 
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
-                variant="outlined"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                onChange={handleChange}
-                autoFocus
-                error={!!errors.firstName}
-                helperText={errors.firstName}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-                onChange={handleChange}
-                error={!!errors.lastName}
-                helperText={errors.lastName}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="emailId"
-                label="Email Address"
-                onChange={handleChange}
-                name="emailId"
-                autoComplete="emailId"
-                error={!!errors.emailId}
-                helperText={errors.emailId}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                variant="outlined"
-                autoComplete="current-password"
-                onChange={handleChange}
-                error={!!errors.password}
-                helperText={errors.password}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePasswordVisibility}>
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
-          </Grid>
+            <form className={classes.form} onSubmit={handleSubmit} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="emailId"
+                    label="Email Address"
+                    onChange={handleChange}
+                    name="emailId"
+                    autoComplete="emailId"
+                    error={!!errors.emailId}
+                    helperText={errors.emailId}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type={showPassword ? "text" : "password"}
+                    variant="outlined"
+                    autoComplete="current-password"
+                    onChange={handleChange}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={handleTogglePasswordVisibility}>
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
 
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            {isLoading ? (
-              <>
-                Loading...
-                <CircularProgress size={20} className={classes.loading} />
-              </>
-            ) : (
-              "Sign Up"
-            )}
-          </Button>
+              <div className={classes.submitWrap}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                >
+                  {isLoading ? (
+                    <>
+                      Loading...
+                      <CircularProgress size={20} className={classes.loading} />
+                    </>
+                  ) : (
+                    "Sign Up"
+                  )}
+                </Button>
+              </div>
 
-          {/* <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button> */}
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link to="/login">Already have an account? Sign in</Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link to="/login">Already have an account? Sign in</Link>
+                </Grid>
+              </Grid>
+            </form>
+          </Paper>
+
+       
+    </div>
+      </Container >
+    </div >
   );
 }
