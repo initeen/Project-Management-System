@@ -63,45 +63,57 @@ export default function SignIn() {
   const history = useHistory();
   const { handleLogin } = useLoginContext();
 
-  const [formData, setFormData] = useState({
-    emailId: "",
-    password: "",
-  });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
-  };
 
-  const validateForm = (currFormData) => {
+  const [emailId, setEmailId] = useState("");
+  const handleEmailIdChange = (event) => {
+    const value = event.target.value;
+    setEmailId(value);
+  }; 
+
+  const [password, setPassword] = useState("");
+  const handlePasswordChange = (event) => {
+    const value = event.target.value;
+    setPassword(value);
+  }; 
+
+
+  const doesFormContainError = () => {
     const newErrors = {};
-    if (!currFormData.emailId.trim()) {
+    let isErrorFound = false;
+    if (emailId.trim() === "") {
       newErrors.emailId = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(currFormData.emailId)) {
+      isErrorFound=true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId)) {
       newErrors.emailId = "Invalid emailId address";
+      isErrorFound=true;
     }
-    if (!currFormData.password.trim()) {
+    if (password.trim() === "") {
       newErrors.password = "Password is required";
+      isErrorFound=true;
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return isErrorFound;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (validateForm(formData)) {
+    if (doesFormContainError() === false) {
+      // if form does not contain error
       setServerError("");
       setIsLoading(true);
       try {
-        await postAPICall("/login", formData);
+        await postAPICall("/login", {
+          emailId,
+          password,
+        });
+        // if login is successful
         setIsLoading(false);
-        console.log("login successful:", formData);
+        // handleLogin sets IsLogin Context Variable to true  
         handleLogin();
+        // go to AppLayout that is Dashboard
         history.push("/project");
         
       } catch (error) {
@@ -125,7 +137,7 @@ export default function SignIn() {
   return (
     <div className={classes.root}>
       <Container component="main" maxWidth="xs" style={{ paddingTop: "50px" }}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         <div className={classes.paper}>
           
           <img src={logo} alt="Logo"
@@ -148,7 +160,7 @@ export default function SignIn() {
                 label="Email Address"
                 name="emailId"
                 autoComplete="emailId"
-                onChange={handleChange}
+                onChange={handleEmailIdChange}
                 error={!!errors?.emailId}
                 helperText={errors?.emailId}
                 autoFocus
@@ -162,7 +174,7 @@ export default function SignIn() {
                 type={showPassword ? "text" : "password"}
                 variant="outlined"
                 autoComplete="current-password"
-                onChange={handleChange}
+                onChange={handlePasswordChange}
                 error={!!errors?.password}
                 helperText={errors?.password}
                 InputProps={{

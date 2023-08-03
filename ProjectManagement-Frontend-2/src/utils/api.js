@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-//const url = 'http://lahare-env.eba-frd3snqh.eu-north-1.elasticbeanstalk.com';
+// const url = 'http://lahare-env.eba-frd3snqh.eu-north-1.elasticbeanstalk.com';
 const url =  'http://localhost:8080';
 const apiVersion = '/api/v1'
 
