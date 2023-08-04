@@ -11,7 +11,7 @@ import {
   Paper,
 } from "@material-ui/core";
 import { KeyboardDatePicker } from "@material-ui/pickers";
-import { getAPICall, postAPICall } from 'utils/api';
+import { postAPICall } from 'utils/api';
 import { useHistory } from "react-router-dom";
 
 const typeOptions = ["External", "Internal", "Vendor"];
@@ -129,6 +129,7 @@ const ProjectForm = () => {
           value={formData?.[name]}
           onChange={handleChange}
           error={formErrors?.[name]}
+          helperText={formErrors?.[name] && `${label} is required`}
         >
           {options.map((type) => {
             return <MenuItem value={type}>{type}</MenuItem>;
@@ -148,7 +149,7 @@ const ProjectForm = () => {
   const disablePastStartDates = (date) => {
 
   
-    if (!formData.endDate) {
+    if (formData.endDate === null) {
       return false;
     }
     return date > new Date(formData.endDate);

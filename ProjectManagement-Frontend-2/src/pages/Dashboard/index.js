@@ -34,76 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data = [
-  { name: "Total projects", value: 50 },
-  { name: "Closed projects", value: 20 },
-  { name: "Running projects", value: 25 },
-  { name: "Cancelled projects", value: 5 },
-  { name: "Reopened projects", value: 10 },
-];
-
-
-const resp = {
-  "statusCounters": [
-      {
-          "status": "Running",
-          "count": 5
-      },
-      {
-          "status": "Cancelled",
-          "count": 3
-      },
-      {
-          "status": "Closed",
-          "count": 1
-      },
-      {
-          "status": "Registered",
-          "count": 1
-      },
-      {
-          "status": "Total",
-          "count": 10
-      },
-      {
-          "status": "CloserDelay",
-          "count": 3
-      }
-  ],
-  "deptCounters": [
-      {
-          "dept": "Stratergy",
-          "totalProjects": 1,
-          "closedProjects": 0
-      },
-      {
-          "dept": "Quality",
-          "totalProjects": 2,
-          "closedProjects": 0
-      },
-      {
-          "dept": "HR",
-          "totalProjects": 1,
-          "closedProjects": 0
-      },
-      {
-          "dept": "Finance",
-          "totalProjects": 3,
-          "closedProjects": 1
-      },
-      {
-          "dept": "GG",
-          "totalProjects": 2,
-          "closedProjects": 0
-      },
-      {
-          "dept": "GM",
-          "totalProjects": 1,
-          "closedProjects": 0
-      }
-  ]
-}
-
 export default function Dashboard() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -112,10 +42,12 @@ export default function Dashboard() {
   const fetchSummaryData = async () => {
     try {
       const {data} = await getAPICall("/summary");
-      const statusCounts = {}
-      const filteredStatusCounters = data?.statusCounters?.filter((item) => item.status !== "Running");
 
+      const filteredStatusCounters = data?.statusCounters?.filter((item) => item.status !== "Running");
       setSummaryData({statusCounts: filteredStatusCounters, deptCounters: data?.deptCounters});
+      
+      // if we want to show Running counters as well
+      // setSummaryData({statusCounts: data?.statusCounters, deptCounters: data?.deptCounters});
     } catch (error) {
       console.error(error);
     }

@@ -37,7 +37,6 @@ export const MainListItems = () => {
         <ListItemIcon>
           <SpeedOutlinedIcon style={{ color: `${location.pathname === "/project" ? "#044e92" : ''}` }} />
         </ListItemIcon >
-        <ListItemText primary="Dashboard" />
       </ListItem>
       <ListItem
         button
@@ -50,7 +49,6 @@ export const MainListItems = () => {
         <ListItemIcon>
           <StorageOutlinedIcon style={{ color: `${location.pathname === "/project/list" ? "#044e92" : ''}` }} />
         </ListItemIcon>
-        <ListItemText primary="Projects" />
       </ListItem>
     </div>
   );
@@ -72,7 +70,6 @@ export const SecondaryListItems = () => {
         <ListItemIcon>
           <AddOutlinedIcon style={{ color: `${location.pathname === "/project/create" ? "#044e92" : ''}` }} />
         </ListItemIcon>
-        <ListItemText primary="Create Project" />
       </ListItem>
     </div>
   );
@@ -95,7 +92,6 @@ export const LogoutListItem = () => {
         <ListItemIcon>
           <ExitToAppIcon />
         </ListItemIcon>
-        <ListItemText primary="Logout" />
       </ListItem>
     </div>
   );

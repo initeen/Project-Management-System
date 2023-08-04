@@ -140,7 +140,6 @@ export default function AppLayout() {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <Drawer
         variant="permanent"
         classes={{
@@ -167,7 +166,8 @@ export default function AppLayout() {
               <ArrowBackIosIcon style={{ color: "white" }} />
               <div style={{ color: "white" }}>
                 <Box style={{ fontSize: '20px' }} m={1}>
-                  {renderHeaderText()}
+                  {/* // Dashboard */}
+                  {renderHeaderText()} 
                 </Box>
               </div>
             </div>
@@ -187,9 +187,6 @@ export default function AppLayout() {
             <Route path="/project/create">
               <CreateProject />
             </Route>
-            {/* <Route path="/logout">
-              <Logout/>
-              </Route> */}
           </Switch>
         </Container>
       </main>
