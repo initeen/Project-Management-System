@@ -1,21 +1,18 @@
 import React from "react";
-
-// components from React router 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
-
-//
 import { LoginProvider } from "./contexts/LoginContext";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import AppLayout from "./pages/AppLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns"; // Import the date picker utilities
+import DateFnsUtils from "@date-io/date-fns";
+
 
 const App = () => {
   return (
@@ -34,7 +31,7 @@ const App = () => {
           </Switch>
         </MuiPickersUtilsProvider>
       </LoginProvider>
-    </Router>
+    </Router> 
   );
 };
 

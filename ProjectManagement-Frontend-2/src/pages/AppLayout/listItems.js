@@ -1,7 +1,6 @@
 import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { useLocation } from "react-router-dom";
@@ -14,7 +13,7 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   activeListItem: {
-    backgroundColor: theme.palette.action.selected, // Change this color as desired
+    backgroundColor: theme.palette.action.selected,
     "&:hover": {
       backgroundColor: theme.palette.action.hover,
     },

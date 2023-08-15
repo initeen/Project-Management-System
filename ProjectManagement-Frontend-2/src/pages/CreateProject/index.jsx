@@ -10,6 +10,7 @@ import {
   Typography,
   Paper,
 } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import { postAPICall } from 'utils/api';
 import { useHistory } from "react-router-dom";
@@ -23,7 +24,7 @@ const divisionOptions = [
   "Size",
 ];
 const priorityOptions = ["High", "Medium", "Low"];
-const deptOptions = ["Stratergy", "Finance", "Quality", "HR", "STO"];
+const deptOptions = ["STR", "FIN", "QLT", "HR", "STO"];
 const locationOptions = ["Pune", "Mumbai", "Nagpur", "Delhi", "Hydrabad"];
 const catgoryOptions = ["Quality A", "Quality B", "Quality C", "Quality D"];
 const reasonOptions = [
@@ -33,7 +34,35 @@ const reasonOptions = [
   "For Restructuring",
 ];
 
+
+const useStyles = makeStyles((theme) => ({
+  topSaveProject: {
+    display: "flex",
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  bottomSaveProject: {
+    display: "none",
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+    },
+  },
+  hideElementOnMobile: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  createProject: {
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: 70,
+    }
+  },
+}));
+
+
 const ProjectForm = () => {
+  const classes = useStyles();
  
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -140,27 +169,23 @@ const ProjectForm = () => {
   };
 
   const disablePastDates = (date) => {
-    
     if (!formData.startDate) {
       return false;
     }
     return date < new Date(formData.startDate);
   };
   const disablePastStartDates = (date) => {
-
-  
-    if (formData.endDate === null) {
+     if (formData.endDate === null) {
       return false;
     }
     return date > new Date(formData.endDate);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={classes.createProject} >
       <Paper style={{ padding: "30px 20px" }}>
         <Grid container spacing={5}>
           <Grid item xs={12} sm={6}>
-            
             <TextField
               label="Project Theme"
               multiline
@@ -176,7 +201,7 @@ const ProjectForm = () => {
             />
           </Grid>
 
-          <Grid style={{ display: "flex" }} item xs={12} sm={6}>
+          <Grid className={classes.topSaveProject} item xs={12} sm={6}>
             <Grid item xs={6}></Grid>
             <Grid item xs={6}>
               <Button type="submit" variant="contained" color="primary" style={{ borderRadius: '20px' }} fullWidth>
@@ -192,7 +217,7 @@ const ProjectForm = () => {
               options: reasonOptions,
             })}
           </Grid>
-          {/* Type */}
+        
           <Grid item xs={12} sm={4}>
             {renderSelectInput({
               label: "Type",
@@ -209,7 +234,6 @@ const ProjectForm = () => {
             })}
           </Grid>
           <Grid item xs={12} sm={4}>
-            {/* Category */}
             {renderSelectInput({
               label: "Category",
               name: "category",
@@ -218,7 +242,6 @@ const ProjectForm = () => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            {/* Priority */}
             {renderSelectInput({
               label: "Priority",
               name: "priority",
@@ -227,7 +250,6 @@ const ProjectForm = () => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            {/* Department */}
             {renderSelectInput({
               label: "Department",
               name: "department",
@@ -236,7 +258,6 @@ const ProjectForm = () => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            {/* Start Date */}
             <KeyboardDatePicker
               label="Start Date"
               format="dd/MM/yyyy"
@@ -256,7 +277,6 @@ const ProjectForm = () => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            {/* End Date */}
             <KeyboardDatePicker
               label="End Date"
               format="dd/MM/yyyy"
@@ -276,14 +296,13 @@ const ProjectForm = () => {
           </Grid>
 
           <Grid item xs={12} sm={4}>
-            {/* Location */}
             {renderSelectInput({
               label: "Location",
               name: "location",
               options: locationOptions,
             })}
           </Grid>
-          <Grid item xs={12} sm={8}></Grid>
+          <Grid item xs={12} sm={8} className={classes.hideElementOnMobile}></Grid>
           <Grid
             item
             xs={12}
@@ -296,6 +315,11 @@ const ProjectForm = () => {
             <Typography variant="h6" style={{ marginLeft: "9px" }}>
               <b>Registered</b>
             </Typography>
+          </Grid>
+          <Grid className={classes.bottomSaveProject} item xs={12} sm={6}>
+            <Button type="submit" variant="contained" color="primary" style={{ borderRadius: '20px' }} fullWidth>
+              Save Project
+            </Button>
           </Grid>
         </Grid>
       </Paper>

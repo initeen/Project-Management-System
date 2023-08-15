@@ -15,36 +15,89 @@ import {
   MenuItem,
   Button,
   Typography,
-  withStyles,
+  Box,
   makeStyles,
 } from "@material-ui/core";
-import CompactSearchInput from './CompactSearchInput'
-import { getAPICall, putAPICall } from 'utils/api';
-import { format } from 'date-fns';
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CompactSearchInput from "./CompactSearchInput";
+import { getAPICall, putAPICall } from "utils/api";
+import { format } from "date-fns";
 
 
-
-const styles = {};
+//const styles = {};
 
 const useStyles = makeStyles((theme) => ({
   buttonChip: {
-    minWidth: 0,
     padding: "6px 12px",
     borderRadius: "20px",
     textTransform: "none",
     margin: "0 5px",
     minWidth: "40px",
-    //   backgroundColor: theme.palette.grey[300],
-    //   '&:hover': {
-    //     backgroundColor: theme.palette.grey[400],
-    //   },
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "90px",
+    },
+   
+  },
+  cardActionContainer: {
+    justifyContent: "space-around",
+  },
+  projectList: {
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: "75px",
+      boxShadow: "none",
+    },
+  },
+  tableContainer: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  fieldContainer: {
+    display: "flex",
+    alignItems: "baseline",
+  },
+  bullet: {
+    margin: "0 10px",
+    color: "#0000008a",
+    fontSize: "21px",
+  },
+  fieldLabel: {
+    marginRight: "5px",
+  },
+  tablePagination: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  cardPagination: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
+    },
+  },
+
+  cardContainer: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
+
+    },
+  },
+  cardItemContainer: {
+    margin: "15px 0",
+  },
+  cardHeading: {
+    display: "flex",
+    justifyContent: "space-between",
   },
   tableCell: {
-    padding: "8px", // Adjust padding as needed
+    padding: "8px", 
     textAlign: "center",
   },
   projectTheme: {
-    padding: "8px", // Adjust padding as needed
+    padding: "8px", 
     textAlign: "center",
     display: "flex",
     flexDirection: "column",
@@ -52,28 +105,23 @@ const useStyles = makeStyles((theme) => ({
   },
   compactTextField: {
     "& .MuiInputBase-root": {
-      padding: "8px 12px", // Adjust padding as needed
-      fontSize: "0.875rem", // Adjust font size as needed
+      padding: "8px 12px", 
+      fontSize: "0.875rem", 
     },
-    // "& .MuiInputLabel-shrink": {
-    //   transform: "translate(10px, -3px) scale(0.75)", // Adjust label position for compact size
-    // },
   },
 }));
 
 const ProjectList = () => {
-  // Sample data for the table (Replace this with your actual data)
   const [projects, setProjects] = useState([]);
   const classes = useStyles();
 
   const fetchProjects = async () => {
-    const pro = await getAPICall('/projects');
+    const pro = await getAPICall("/projects");
     setProjects(pro?.data || []);
-  }
-
+  };
 
   useEffect(() => {
-    fetchProjects()
+    fetchProjects();
   }, []);
 
   // Pagination state
@@ -81,7 +129,7 @@ const ProjectList = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Sorting state
-  const [sortBy, setSortBy] = useState("priority"); // Default sorting by project projectTheme
+  const [sortBy, setSortBy] = useState("priority");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Handle pagination change
@@ -102,14 +150,11 @@ const ProjectList = () => {
   };
 
   const handleAction = async (status, project) => {
-    // Replace this with your actual logic to handle the actions (Start, Close, Cancel) based on the project ID.
-    // console.log(`Performing ${action} action on project with ID ${projectId}`);
-
     const newData = {
       ...project,
       status,
     };
-    await putAPICall(`/project/${project.projectId}`, newData)
+    await putAPICall(`/project/${project.projectId}`, newData);
     fetchProjects();
   };
 
@@ -125,7 +170,7 @@ const ProjectList = () => {
           project.reason.toLowerCase().includes(lowerCasedQuery) ||
           project.type.toLowerCase().includes(lowerCasedQuery) ||
           project.division.toLowerCase().includes(lowerCasedQuery) ||
-          project.category.toLowerCase()==lowerCasedQuery ||
+          project.category.toLowerCase() == lowerCasedQuery ||
           project.priority.toLowerCase().includes(lowerCasedQuery) ||
           project.department.toLowerCase().includes(lowerCasedQuery) ||
           project.location.toLowerCase().includes(lowerCasedQuery) ||
@@ -133,17 +178,16 @@ const ProjectList = () => {
         );
       })
       .sort((a, b) => {
-        const compareResult = a[sortBy].localeCompare(b[sortBy])
+        const compareResult = a[sortBy].localeCompare(b[sortBy]);
         return compareResult;
       });
     setPaginatedData(filteredPro);
-    const newPro = filteredPro.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    const newPro = filteredPro.slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage
+    );
     setTableData(newPro);
   };
-
-  // projects = backend data = 22
-  // paginatedData = filered + sorted = 6
-  // tableData= 5
 
   useEffect(() => {
     handleSearchSortingPagination();
@@ -151,36 +195,12 @@ const ProjectList = () => {
 
   const getFormatedDate = (date) => {
     const originalDate = new Date(date);
-    return format(originalDate, 'MMMM-dd, yyyy');
+    return format(originalDate, "MMMM-dd, yyyy");
   };
 
-  return (
-    <Paper>
-      <div
-        style={{
-          marginBottom: "10px",
-          display: "flex",
-          justifyContent: "space-between",
-          padding: "10px",
-        }}
-      >
-        <CompactSearchInput value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)} />
-        {/* Sort by dropdown */}
-        <FormControl variant="outlined">
-          <InputLabel>Sort By</InputLabel>
-          <Select value={sortBy} onChange={handleSortChange} label="Sort By">
-            <MenuItem value="priority">Priority</MenuItem>
-            <MenuItem value="category">Category</MenuItem>
-            <MenuItem value="reason">Reason</MenuItem>
-            <MenuItem value="division">Division</MenuItem>
-            <MenuItem value="department">Department</MenuItem>
-            <MenuItem value="location">Location</MenuItem>
-            {/* Add more columns for sorting here... */}
-          </Select>
-        </FormControl>
-      </div>
-      <TableContainer>
+  const displayTable = () => {
+    return (
+      <TableContainer className={classes.tableContainer}>
         <Table style={{ padding: "8px" }}>
           <TableHead>
             <TableRow>
@@ -198,7 +218,13 @@ const ProjectList = () => {
           </TableHead>
           <TableBody>
             {tableData.map((projectDate) => {
-              const { projectId, startDate, endDate, projectTheme, ...project } = projectDate;
+              const {
+                projectId,
+                startDate,
+                endDate,
+                projectTheme,
+                ...project
+              } = projectDate;
               return (
                 <TableRow key={projectId}>
                   <TableCell key={projectId} className={classes.projectTheme}>
@@ -237,11 +263,197 @@ const ProjectList = () => {
                     </Button>
                   </TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
       </TableContainer>
+    );
+  };
+
+  const displayCards = () => {
+    
+    return (
+      <div className={classes.cardContainer}>
+        {tableData.map((project) => {
+          return (
+            <Paper className={classes.cardItemContainer}>
+              <Card className={classes.cardItem}>
+                <CardContent>
+                  <div className={classes.cardHeading}>
+                    <Typography variant="h5" component="h2">
+                      {project?.projectTheme}
+                    </Typography>
+                    <Typography style={{ color: "#2c366e" }}>
+                      <b>{project?.status}</b>
+                    </Typography>
+                  </div>
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {getFormatedDate(project?.startDate)} to{" "}
+                    {getFormatedDate(project?.endDate)}
+                  </Typography>
+
+                  <div className={classes.fieldContainer}>
+                    <Typography
+                      className={classes.fieldLabel}
+                      component="p"
+                      color="textSecondary"
+                    >
+                      Reason:
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {project?.reason}
+                    </Typography>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className={classes.fieldContainer}>
+                      <Typography
+                        className={classes.fieldLabel}
+                        component="p"
+                        color="textSecondary"
+                      >
+                        Type:
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        {project?.type}
+                      </Typography>
+                    </div>
+                    <span className={classes.bullet}>•</span>
+                    <div className={classes.fieldContainer}>
+                      <Typography
+                        className={classes.fieldLabel}
+                        component="p"
+                        color="textSecondary"
+                      >
+                        Category:
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        {project?.category}
+                      </Typography>
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className={classes.fieldContainer}>
+                      <Typography
+                        className={classes.fieldLabel}
+                        component="p"
+                        color="textSecondary"
+                      >
+                        Div:
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        {project?.division}
+                      </Typography>
+                    </div>
+                    <span className={classes.bullet}>•</span>
+                    <div className={classes.fieldContainer}>
+                      <Typography
+                        className={classes.fieldLabel}
+                        component="p"
+                        color="textSecondary"
+                      >
+                        Dept:
+                      </Typography>
+                      <Typography variant="body2" component="p">
+                        {project?.department}
+                      </Typography>
+                    </div>
+                  </div>
+
+                  <div className={classes.fieldContainer}>
+                    <Typography
+                      className={classes.fieldLabel}
+                      component="p"
+                      color="textSecondary"
+                    >
+                      Location:
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {project?.location}
+                    </Typography>
+                  </div>
+                  <div className={classes.fieldContainer}>
+                    <Typography
+                      className={classes.fieldLabel}
+                      component="p"
+                      color="textSecondary"
+                    >
+                      Priority:
+                    </Typography>
+                    <Typography variant="body2" component="p">
+                      {project?.priority}
+                    </Typography>
+                  </div>
+                </CardContent>
+                <CardActions className={classes.cardActionContainer}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.buttonChip}
+                    onClick={() => handleAction("Running", project)}
+                  >
+                    Start
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.buttonChip}
+                    onClick={() => handleAction("Closed", project)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.buttonChip}
+                    onClick={() => handleAction("Cancelled", project)}
+                  >
+                    Cancel
+                  </Button>
+                </CardActions>
+              </Card>
+            </Paper>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    <Paper className={classes.projectList}>
+      <div
+        style={{
+          marginBottom: "10px",
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "10px",
+        }}
+      >
+        <CompactSearchInput
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        {/* Sort by dropdown */}
+        <FormControl variant="outlined">
+          <InputLabel>Sort By</InputLabel>
+          <Select value={sortBy} onChange={handleSortChange} label="Sort By">
+            <MenuItem value="priority">Priority</MenuItem>
+            <MenuItem value="category">Category</MenuItem>
+            <MenuItem value="reason">Reason</MenuItem>
+            <MenuItem value="division">Division</MenuItem>
+            <MenuItem value="department">Department</MenuItem>
+            <MenuItem value="location">Location</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
+      {displayTable()}
+      {displayCards()}
       {tableData.length === 0 && (
         <Typography
           variant="body2"
@@ -261,9 +473,17 @@ const ProjectList = () => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        style={{ textAlign: 'center' }}
-        showFirstButton
-        showLastButton
+        className={classes.tablePagination}
+      />
+       <TablePagination
+        rowsPerPageOptions={[]}
+        component="div"
+        count={paginatedData?.length}
+        page={page}
+        rowsPerPage={5}
+        onPageChange={handleChangePage}
+        className={classes.cardPagination}
+      
       />
     </Paper>
   );

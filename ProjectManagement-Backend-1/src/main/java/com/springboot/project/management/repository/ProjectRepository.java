@@ -1,14 +1,10 @@
 package com.springboot.project.management.repository;
 
 import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
 import com.springboot.project.management.model.Project;
-import com.springboot.project.management.model.User;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -26,3 +22,4 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 	 @Query("SELECT department, COUNT(*) AS total_projects, COUNT(CASE WHEN status = 'Closed' THEN 1 ELSE NULL END) AS closed_projects FROM Project GROUP BY department")
 	 List<Object[]> getProjectCountsByDept();
 }
+ 

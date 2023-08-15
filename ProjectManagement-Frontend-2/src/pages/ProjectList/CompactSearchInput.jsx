@@ -4,18 +4,17 @@ import SearchIcon from "@material-ui/icons/Search";
 
 const styles = {
   compactSearchInput: {
-    padding: "4px 12px", // Adjust padding as needed
-    fontSize: "0.875rem", // Adjust font size as needed
-    display: "flex",
+    padding: "4px 12px", 
+    fontSize: "0.875rem", 
     alignItems: "center",
-    width: 150, // Adjust the width as needed
-    backgroundColor: "#f5f5f5", // Set a background color for a cleaner appearance
-    borderRadius: 10, // Add border radius for rounded corners
+    width: 150, 
+    backgroundColor: "#f5f5f5", 
+    borderRadius: 10, 
     borderBottom: '2px solid #ccc',
   },
   searchIcon: {
-    marginRight: 8, // Add spacing between the search icon and the input text
-    color: "#888", // Set the color of the search icon
+    marginRight: 8, 
+    color: "#888", 
   },
 };
 

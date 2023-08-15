@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -16,7 +15,6 @@ import { useLoginContext } from "contexts/LoginContext";
 import { getAPICall, postAPICall } from 'utils/api';
 import logo from 'assets/images/Logo.svg';
 
-//Login CSS
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundImage: `url('/login-bg-1.svg')`, 
@@ -24,9 +22,11 @@ const useStyles = makeStyles((theme) => ({
     width: "100vw",
     backgroundSize: "contain",
     backgroundRepeat: "no-repeat",
+    [theme.breakpoints.down('sm')]: {
+      backgroundSize: "auto",
+    },
   },
   paper: {
-   
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 1, 2),
     width: "60%",
     borderRadius: "20px",
+    [theme.breakpoints.down('sm')]: {
+     width: "100%",
+    },
   },
   submitWrap: {
     display: "flex",
@@ -53,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "25px",
     marginTop: "15px",
     borderRadius: "7px",
+    [theme.breakpoints.down('sm')]: {
+      marginTop: "17%",
+    },
   }
 }));
 
@@ -101,7 +107,6 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (doesFormContainError() === false) {
-      // if form does not contain error
       setServerError("");
       setIsLoading(true);
       try {
@@ -137,9 +142,7 @@ export default function Login() {
   return (
     <div className={classes.root}>
       <Container component="main" maxWidth="xs" style={{ paddingTop: "50px" }}>
-        {/* <CssBaseline /> */}
         <div className={classes.paper}>
-          
           <img src={logo} alt="Logo"
           />
           <Typography style={{ color: 'white', marginTop: '10px' }} component="h6" variant="h6">

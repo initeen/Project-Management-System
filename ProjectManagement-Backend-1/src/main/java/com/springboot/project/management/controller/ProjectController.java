@@ -17,14 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.data.domain.Sort;
-
 import com.springboot.project.management.model.Project;
-import com.springboot.project.management.model.User;
 import com.springboot.project.management.repository.ProjectRepository;
 import com.springboot.project.management.services.*;
 
-//@CrossOrigin(origins = "http://project-management-1997.s3-website.eu-north-1.amazonaws.com/")
 @CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/api/v1")
@@ -55,11 +51,11 @@ public class ProjectController {
 	// get all projects
 	@GetMapping("/projects")
 	public List<Project> getAllProject() {
-		Sort sort = Sort.by(Sort.Direction.DESC, "projectId");
-		return projectRepository.findAll(sort);
+		
+		return projectRepository.findAll();
 	}
 
-	// get all projects
+	// get all projects summary
 	@GetMapping("/summary")
 	public DashboardSummaryDTO getDashboardSummary() {
 
@@ -99,8 +95,6 @@ public class ProjectController {
 		}
 		//System.out.println("projectCountDTO ", projectCounts);
         
-        
-        
         Long totalCloserDelayProjectCount = projectRepository.getClosureDelayProjectCount();
 
         // Add the total count as a separate entry in the result list
@@ -126,7 +120,7 @@ public class ProjectController {
 		successResponse.put("success", "true");
 		successResponse.put("message", "Status updated successfully");
 		return ResponseEntity.status(HttpStatus.OK).body(successResponse);
-//		return ResponseEntity.ok(project);
+		
 	}
 
 }

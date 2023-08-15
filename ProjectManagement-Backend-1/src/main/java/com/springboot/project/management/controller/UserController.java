@@ -1,10 +1,7 @@
 package com.springboot.project.management.controller;
 
-import java.util.List;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.springboot.project.management.model.User;
 import com.springboot.project.management.repository.UserRepository;
 
-//@CrossOrigin(origins = "http://project-management-1997.s3-website.eu-north-1.amazonaws.com/")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("/api/v1")

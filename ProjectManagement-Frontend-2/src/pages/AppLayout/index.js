@@ -1,30 +1,23 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
-import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { MainListItems, SecondaryListItems, LogoutListItem } from "./listItems";
 import { Switch, Route } from "react-router-dom";
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { useLocation } from "react-router-dom";
-
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import { ExitToApp as ExitToAppIcon } from "@material-ui/icons";
+import { useLocation, useHistory } from "react-router-dom";
+import { useLoginContext } from "contexts/LoginContext";
 import Dashboard from "pages/Dashboard";
 import ProjectList from "pages/ProjectList";
-import CreateProject from 'pages/CreateProject';
-import logo from 'assets/images/Logo.svg';
+import CreateProject from "pages/CreateProject";
 
-
+import logo from "assets/images/Logo.svg";
+import BottomNav from "./bottomNav";
 
 const drawerWidth = 240;
 
@@ -32,40 +25,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-  },
+  
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",
@@ -76,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
     }),
     display: "flex",
     justifyContent: "center",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
   drawerPaperClose: {
     overflowX: "hidden",
@@ -88,7 +51,19 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9),
     },
   },
-  appBarSpacer: { ...theme.mixins.toolbar, display: "flex", },
+  appBarSpacer: {
+    display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      alignItems: "center",
+      justifyContent: "space-between",
+    },
+  },
+  logout: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "block",
+    },
+  },
   content: {
     flexGrow: 1,
     height: "100vh",
@@ -102,14 +77,13 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     paddingTop: theme.spacing(4),
-
   },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
+  logoImage: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
+  
   fixedHeight: {
     height: 240,
   },
@@ -118,13 +92,7 @@ const useStyles = makeStyles((theme) => ({
 export default function AppLayout() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  
   const location = useLocation();
 
   const renderHeaderText = () => {
@@ -138,6 +106,13 @@ export default function AppLayout() {
     }
   };
 
+  const { handleLogout } = useLoginContext();
+  const history = useHistory();
+  const onLogoutClick = () => {
+    handleLogout();
+    history.push("/login");
+  };
+
   return (
     <div className={classes.root}>
       <Drawer
@@ -146,7 +121,6 @@ export default function AppLayout() {
           paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
         }}
         style={{ display: "flex", justifyContent: "center" }}
-        open={false}
       >
         <List>
           <MainListItems />
@@ -165,15 +139,21 @@ export default function AppLayout() {
             <div style={{ display: "flex", alignItems: "center" }}>
               <ArrowBackIosIcon style={{ color: "white" }} />
               <div style={{ color: "white" }}>
-                <Box style={{ fontSize: '20px' }} m={1}>
-                  {/* // Dashboard */}
-                  {renderHeaderText()} 
+                <Box style={{ fontSize: "20px" }} m={1}>
+                  {/* // Dashboard Or List Or Create */}
+                  {renderHeaderText()}
                 </Box>
               </div>
             </div>
-            <div style={{marginLeft: "420px"}}>
-              <img src={logo} alt="Logo"
-              /></div>
+            <div style={{ marginLeft: "420px" }} className={classes.logoImage}>
+              <img src={logo} alt="Logo" />
+            </div>
+            <div className={classes.logout}>
+              <ExitToAppIcon
+                onClick={onLogoutClick}
+                style={{ color: "#fff" }}
+              />
+            </div>
           </div>
         </Container>
         <Container maxWidth="lg" className={classes.container}>
@@ -190,6 +170,7 @@ export default function AppLayout() {
           </Switch>
         </Container>
       </main>
+      <BottomNav />
     </div>
   );
 }

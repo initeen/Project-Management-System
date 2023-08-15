@@ -1,10 +1,9 @@
-// LoginContext.js
 import React, { createContext, useContext, useState } from 'react';
 
-// Create the LoginContext
+// LoginContext
 const LoginContext = createContext();
 
-// Create a custom hook to consume the LoginContext
+//hook to consume the LoginContext
 const useLoginContext = () => {
   const context = useContext(LoginContext);
   if (!context) {
@@ -13,22 +12,21 @@ const useLoginContext = () => {
   return context;
 };
 
-// Create the LoginProvider component
+// LoginProvider component
 const LoginProvider = ({ children }) => {
 
   const isLogin =   localStorage.getItem('isLogin');
   const [isLoggedIn, setIsLoggedIn] = useState(isLogin === 'true');
 
   const handleLogin = () => {
-    // Implement your login logic here (e.g., with API calls to the server).
-    // For simplicity, we'll assume a successful login.
+    
     setIsLoggedIn(true);
     localStorage.setItem('isLogin', true)
-    // You can store additional user data in the context if needed.
+    
   };
 
   const handleLogout = () => {
-    // Implement your logout logic here (e.g., clearing tokens, etc.).
+   
     setIsLoggedIn(false);
     localStorage.removeItem('isLogin')
   };
