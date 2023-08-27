@@ -21,6 +21,8 @@ public class User {
 	
 	@Column(name="user_password")
 	private String password;
+	
+	
 
 	public User() {
 		super();

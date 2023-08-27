@@ -192,7 +192,7 @@ export default function Login() {
               />
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link to="/signup">{"Forget Password?"}</Link>
+                  <Link to="/signup">{"Create Account"}</Link>
                 </Grid>
               </Grid>
               <div className={classes.submitWrap}>
@@ -224,3 +224,4 @@ export default function Login() {
     </div>
   );
 }
+
